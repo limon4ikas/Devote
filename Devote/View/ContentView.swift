@@ -11,6 +11,12 @@ import SwiftUI
 struct ContentView: View {
     // MARK: - PROPERTIES
 
+    @State var task: String = ""
+    
+    private var isButtonDisabled: Bool {
+        task.isEmpty
+    }
+
     @Environment(\.managedObjectContext) private var viewContext
 
     // FETCHING DATA
@@ -25,6 +31,9 @@ struct ContentView: View {
         withAnimation {
             let newItem = Item(context: viewContext)
             newItem.timestamp = Date()
+            newItem.task = task
+            newItem.completion = false
+            newItem.id = UUID()
 
             do {
                 try viewContext.save()
@@ -32,6 +41,9 @@ struct ContentView: View {
                 let nsError = error as NSError
                 fatalError("Unresolved error \(nsError), \(nsError.userInfo)")
             }
+            
+            task = ""
+            hideKeyboard()
         }
     }
 
@@ -52,37 +64,66 @@ struct ContentView: View {
 
     var body: some View {
         NavigationView {
-            List {
-                ForEach(items) { item in
-                    NavigationLink {
-                        Text("Item at \(item.timestamp!, formatter: itemFormatter)")
-                    } label: {
-                        Text(item.timestamp!, formatter: itemFormatter)
+            VStack {
+                VStack(spacing: 16, content: {
+                    if #available(iOS 15.0, *) {
+                        TextField("New task", text: $task)
+                            .padding()
+                            .background(Color(uiColor: .systemGray6))
+                            .cornerRadius(10)
+
+                        Button(action: {
+                            addItem()
+                        }, label: {
+                            Spacer()
+                            Text("SAVE")
+                            Spacer()
+                        })
+                            .disabled(isButtonDisabled)
+                            .padding()
+                            .font(.headline)
+                            .foregroundColor(.white)
+                            .background(isButtonDisabled ? Color.gray : Color.pink)
+                            .cornerRadius(10)
+                    } else {
+                        // Fallback on earlier versions
+                        TextField("New task", text: $task)
+                            .padding()
+                            .background(Color(.gray))
+                            .cornerRadius(10)
                     }
-                }
-                .onDelete(perform: deleteItems)
-            } //: LIST
-            .toolbar {
-                #if os(iOS)
-                ToolbarItem(placement: .navigationBarLeading) {
-                    EditButton()
-                }
-                #endif
-                ToolbarItem(placement: .navigationBarTrailing) {
-                    Button(action: addItem) {
-                        Label("Add Item", systemImage: "plus")
+                }) //: VSTACK
+                    .padding()
+ 
+                List {
+                    ForEach(items) { item in
+                        VStack(alignment: .leading) {
+                            Text(item.task ?? "")
+                                .font(.headline)
+                                .fontWeight(.bold)
+
+                            Text("Item at \(item.timestamp!, formatter: itemFormatter)")
+                                .font(.footnote)
+                                .foregroundColor(.gray)
+                        } //: VSTACK
+                    } //: LOOP
+                    .onDelete(perform: deleteItems)
+                } //: LIST
+                .navigationBarTitle("Dailty tasks", displayMode: .large)
+                .toolbar {
+                    #if os(iOS)
+                    ToolbarItem(placement: .navigationBarTrailing) {
+                        EditButton()
                     }
-                }
-            } //: TOOLBAR
-            Text("Select an item")
-        }
+                    #endif
+                } //: TOOLBAR
+            } //: VSTACK
+        } //: NAVIGATION
     }
 }
 
-
-
-
 // MARK: - PREVIEW
+
 struct ContentView_Previews: PreviewProvider {
     static var previews: some View {
         ContentView().environment(\.managedObjectContext, PersistenceController.preview.container.viewContext)
