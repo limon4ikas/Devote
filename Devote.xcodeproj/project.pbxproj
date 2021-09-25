@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		C13A94DB26FE9DF90027B6BF /* BackgroundImageView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C13A94DA26FE9DF90027B6BF /* BackgroundImageView.swift */; };
 		C1BE4A4A26FA7FD800F7C4BC /* DevoteApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = C1BE4A4926FA7FD800F7C4BC /* DevoteApp.swift */; };
 		C1BE4A4C26FA7FD800F7C4BC /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C1BE4A4B26FA7FD800F7C4BC /* ContentView.swift */; };
 		C1BE4A4E26FA7FD900F7C4BC /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = C1BE4A4D26FA7FD900F7C4BC /* Assets.xcassets */; };
@@ -21,6 +22,7 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		C13A94DA26FE9DF90027B6BF /* BackgroundImageView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BackgroundImageView.swift; sourceTree = "<group>"; };
 		C1BE4A4626FA7FD800F7C4BC /* Devote.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Devote.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		C1BE4A4926FA7FD800F7C4BC /* DevoteApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DevoteApp.swift; sourceTree = "<group>"; };
 		C1BE4A4B26FA7FD800F7C4BC /* ContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentView.swift; sourceTree = "<group>"; };
@@ -102,6 +104,7 @@
 			isa = PBXGroup;
 			children = (
 				C1BE4A4B26FA7FD800F7C4BC /* ContentView.swift */,
+				C13A94DA26FE9DF90027B6BF /* BackgroundImageView.swift */,
 			);
 			path = View;
 			sourceTree = "<group>";
@@ -212,6 +215,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				C1BE4A5326FA7FD900F7C4BC /* Persistence.swift in Sources */,
+				C13A94DB26FE9DF90027B6BF /* BackgroundImageView.swift in Sources */,
 				C1BE4A4C26FA7FD800F7C4BC /* ContentView.swift in Sources */,
 				C1BE4A7026FAAEBC00F7C4BC /* HideKeyboardExtension.swift in Sources */,
 				C1BE4A6E26FAA6F500F7C4BC /* Constant.swift in Sources */,

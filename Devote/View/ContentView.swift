@@ -12,7 +12,7 @@ struct ContentView: View {
     // MARK: - PROPERTIES
 
     @State var task: String = ""
-    
+
     private var isButtonDisabled: Bool {
         task.isEmpty
     }
@@ -41,7 +41,7 @@ struct ContentView: View {
                 let nsError = error as NSError
                 fatalError("Unresolved error \(nsError), \(nsError.userInfo)")
             }
-            
+
             task = ""
             hideKeyboard()
         }
@@ -64,61 +64,73 @@ struct ContentView: View {
 
     var body: some View {
         NavigationView {
-            VStack {
-                VStack(spacing: 16, content: {
-                    if #available(iOS 15.0, *) {
-                        TextField("New task", text: $task)
-                            .padding()
-                            .background(Color(uiColor: .systemGray6))
-                            .cornerRadius(10)
+            ZStack {
+                VStack {
+                    VStack(spacing: 16, content: {
+                        if #available(iOS 15.0, *) {
+                            TextField("New task", text: $task)
+                                .padding()
+                                .background(Color(uiColor: .systemGray6))
+                                .cornerRadius(10)
 
-                        Button(action: {
-                            addItem()
-                        }, label: {
-                            Spacer()
-                            Text("SAVE")
-                            Spacer()
-                        })
-                            .disabled(isButtonDisabled)
-                            .padding()
-                            .font(.headline)
-                            .foregroundColor(.white)
-                            .background(isButtonDisabled ? Color.gray : Color.pink)
-                            .cornerRadius(10)
-                    } else {
-                        // Fallback on earlier versions
-                        TextField("New task", text: $task)
-                            .padding()
-                            .background(Color(.gray))
-                            .cornerRadius(10)
-                    }
-                }) //: VSTACK
-                    .padding()
- 
-                List {
-                    ForEach(items) { item in
-                        VStack(alignment: .leading) {
-                            Text(item.task ?? "")
+                            Button(action: {
+                                addItem()
+                            }, label: {
+                                Spacer()
+                                Text("SAVE")
+                                Spacer()
+                            })
+                                .disabled(isButtonDisabled)
+                                .padding()
                                 .font(.headline)
-                                .fontWeight(.bold)
+                                .foregroundColor(.white)
+                                .background(isButtonDisabled ? Color.gray : Color.pink)
+                                .cornerRadius(10)
+                        } else {
+                            // Fallback on earlier versions
+                            TextField("New task", text: $task)
+                                .padding()
+                                .background(Color(.gray))
+                                .cornerRadius(10)
+                        }
+                    }) //: VSTACK
+                        .padding()
 
-                            Text("Item at \(item.timestamp!, formatter: itemFormatter)")
-                                .font(.footnote)
-                                .foregroundColor(.gray)
-                        } //: VSTACK
-                    } //: LOOP
-                    .onDelete(perform: deleteItems)
-                } //: LIST
-                .navigationBarTitle("Dailty tasks", displayMode: .large)
-                .toolbar {
-                    #if os(iOS)
-                    ToolbarItem(placement: .navigationBarTrailing) {
-                        EditButton()
-                    }
-                    #endif
-                } //: TOOLBAR
+                    List {
+                        ForEach(items) { item in
+                            VStack(alignment: .leading) {
+                                Text(item.task ?? "")
+                                    .font(.headline)
+                                    .fontWeight(.bold)
+
+                                Text("Item at \(item.timestamp!, formatter: itemFormatter)")
+                                    .font(.footnote)
+                                    .foregroundColor(.gray)
+                            } //: VSTACK
+                        } //: LOOP
+                        .onDelete(perform: deleteItems)
+                    } //: LIST
+                    .onAppear(perform: {
+                        UITableView.appearance().backgroundColor = UIColor.clear
+                    })
+                    .listStyle(InsetGroupedListStyle())
+                    .navigationBarTitle("Dailty tasks", displayMode: .large)
+                    .shadow(color: Color(red: 0, green: 0, blue: 0, opacity: 0.3), radius: 12)
+                    .padding(.vertical, 0)
+                    .frame(maxWidth: 640)
+                    .toolbar {
+                        #if os(iOS)
+                        ToolbarItem(placement: .navigationBarTrailing) {
+                            EditButton()
+                        }
+                        #endif
+                    } //: TOOLBAR
+                } //: ZSTACK
+                .background(BackgroundImageView())
+                .background(backgroundGradient.ignoresSafeArea(.all))
             } //: VSTACK
         } //: NAVIGATION
+        .navigationViewStyle(StackNavigationViewStyle())
     }
 }
 
